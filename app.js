@@ -69,6 +69,39 @@ class RecipeBook {
             this.addRecipe(name, ingredients, instructions);
             form.reset();
         });
+
+        const searchInput = document.getElementById('search-input');
+        searchInput.addEventListener('input', (e) => {
+        this.searchRecipes(e.target.value);
+        });
+    }
+
+    searchRecipes(query) {
+        const searchTerm = query.toLowerCase();
+        const filteredRecipes = this.recipes.filter(recipe => 
+            recipe.name.toLowerCase().includes(searchTerm) ||
+            recipe.ingredients.toLowerCase().includes(searchTerm)
+        );
+        this.renderFilteredRecipes(filteredRecipes);
+    }
+    
+    renderFilteredRecipes(recipes) {
+        const recipesDiv = document.getElementById('recipes');
+        recipesDiv.innerHTML = '';
+    
+        recipes.forEach(recipe => {
+            const recipeCard = document.createElement('div');
+            recipeCard.className = 'recipe-card';
+            recipeCard.innerHTML = `
+                <h3>${recipe.name}</h3>
+                <h4>Ingredients:</h4>
+                <p>${recipe.ingredients}</p>
+                <h4>Instructions:</h4>
+                <p>${recipe.instructions}</p>
+                <button onclick="recipeBook.deleteRecipe(${recipe.id})">Delete Recipe</button>
+            `;
+            recipesDiv.appendChild(recipeCard);
+        });
     }
 }
 
